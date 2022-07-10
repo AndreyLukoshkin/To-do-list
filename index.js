@@ -1,3 +1,5 @@
+console.log('Here is develop')
+
 console.log('Hello')    
 console.log(document);
 const app = document.getElementById('app');
@@ -74,3 +76,4 @@ button.addEventListener('click', () => {
 
 renderToDo();
 console.log(app);
+
