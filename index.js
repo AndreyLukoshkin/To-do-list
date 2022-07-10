@@ -3,6 +3,10 @@ console.log(document);
 const app = document.getElementById('app');
 const button = document.getElementById('button')
 
+
+console.log('CHANGING FROM GITHUB')
+
+
 const inputText = document.getElementById('inputText')
 
 
