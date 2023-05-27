@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <input id="inputText" type="text">
-    <button id="button">add</button>
-    <div id="app">
-         
+  <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>todo app</title>
+  </head>
+  <body>
+    <div class="todoList__wrapper">
+      <div class="container">
+        <header class="header">
+          <h1 class="container__h1">ToDo Vanilla JS</h1>
+        </header>
+        <main class="main">
+          <div class="container__inputTodo">
+              <input class="container__inputTodo_inputText" id="inputText" type="text"/>
+              <button class="container__inputTodo_button" id="button">Add new task</button>
+                <div class='container__buttons'>
+                  <button class="container__buttons_button" id="buttonClearAll">Clear all</button>
+                  <button class="container__buttons_button" id="buttonClearChecked">Clear checked</button>
+                  <select id="select" class="container__buttons_select">
+                    <option disabled selected></option>
+                    <option value="name">By name</option>
+                    <option value="time">By time</option>
+                  </select>
+                  <input class="container__buttons_input" id="input__search" type="text" placeholder="search" value="">
+                </div>
+          </div>
+          <div class="container__app" id="app"></div>
+        </main>
+          <footer class="footer">
+            JavaScript
+          </footer>
+        <script src="index.js"></script>
+      </div>
     </div>
-    <script src="index.js"></script>
-</body>
+  </body>
 </html>
