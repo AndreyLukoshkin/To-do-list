@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+}
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: Inter;
+}
+
+.todoList__wrapper {
+  display: flex;
+  min-height: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: rgba(146, 211, 230, 0.5);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  flex: 1 0 320px;
+}
+
+.header {
+  background-color: rgba(60, 185, 223, 0.5);
+}
+
+.container__h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  margin: 20px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.container__inputTodo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container__inputTodo_inputText {
+  margin-top: 10px;
+  padding: 5px 10px;
+  width: 80%;
+  border: 1px solid rgb(126, 179, 195);
+  border-radius: 5px;
+}
+
+.container__inputTodo_button {
+  border: 1px solid rgb(126, 179, 195);
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 5px 10px;
+  width: 204px;
+  background: white;
+}
+
+.container__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.container__buttons_button {
+  border: 1px solid rgb(126, 179, 195);
+  border-radius: 5px;
+  padding: 3px 5px;
+  width: 100px;
+  background: white;
+}
+
+.container__buttons_select {
+  border: 1px solid rgb(126, 179, 195);
+  border-radius: 5px;
+  padding: 2px 5px;
+  background: white;
+}
+
+.container__buttons_input {
+  border: 1px solid rgb(126, 179, 195);
+  border-radius: 5px;
+  padding: 3px 5px;
+  background: white;
+}
+
+.container__inputTodo_button:hover,
+.container__buttons_buttons:hover {
+  background: rgba(192, 240, 255, 0.5);
+  box-shadow: 0 0 0px 1px;
+}
+
+.container__inputTodo_button:active,
+.container__buttons_button:active {
+  background: rgba(128, 218, 246, 0.5);
+  box-shadow: 0 0 0px 1px;
+}
+
+.container__app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.container__inputTodo_inputText_wrong {
+  border: 1px solid red;
+}
+
+.container__app_todo-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+  margin-bottom: 10px;
+}
+
+.container__app_todo-container p {
+  border: 1px solid rgb(126, 179, 195);
+  border-radius: 5px;
+  padding: 10px 20px;
+  background: white;
+}
+.container__app_todo-container div {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.container__app_todo-container div button {
+  margin-left: 7px;
+  padding: 3px 10px;
+  border: 1px solid rgb(126, 179, 195);
+  border-radius: 5px;
+  background: white;
+}
+
+.container__app_todo-container div button:hover {
+  background: rgba(224, 248, 255, 0.5);
+  box-shadow: 0 0 0px 1px;
+}
+
+.container__app_todo-container:active div button:active {
+  background: rgba(184, 239, 255, 0.5);
+  box-shadow: 0 0 0px 1px;
+}
+
+.container__app_todo_checked {
+  background-color: rgb(235, 235, 235) !important;
+  color: rgb(199, 199, 199) !important;
+  text-decoration: line-through;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  background-color: rgba(60, 185, 223, 0.5);
+  color: rgba(0, 0, 0, 0.3);
+}
