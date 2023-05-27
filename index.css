@@ -133,13 +133,28 @@ body {
   margin-bottom: 10px;
 }
 
-.container__app_todo-container p {
+.container__app_paragraph_time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border: 1px solid rgb(126, 179, 195);
   border-radius: 5px;
   padding: 10px 20px;
   background: white;
 }
-.container__app_todo-container div {
+
+.container__app_paragraph_time_checked {
+  background-color: rgb(235, 235, 235) !important;
+  color: rgb(199, 199, 199) !important;
+  text-decoration: line-through;
+}
+
+.container__app_time {
+  color: rgba(41, 43, 44, 0.5);
+  font-size: 12px;
+}
+
+.container__app_checkbox_delete {
   margin-top: 10px;
   display: flex;
   justify-content: center;
@@ -161,12 +176,6 @@ body {
 .container__app_todo-container:active div button:active {
   background: rgba(184, 239, 255, 0.5);
   box-shadow: 0 0 0px 1px;
-}
-
-.container__app_todo_checked {
-  background-color: rgb(235, 235, 235) !important;
-  color: rgb(199, 199, 199) !important;
-  text-decoration: line-through;
 }
 
 .footer {
