@@ -13,6 +13,7 @@ const yesModalBtn = document.getElementById('yesModalBtn')
 
 // MODAL WINDOW
 
+//open
 buttonClearAll.addEventListener('click', () => {
   if (arrayOfToDo.length === 0) return
   modalwrapper.classList.toggle('modal-wrapper')
@@ -20,6 +21,7 @@ buttonClearAll.addEventListener('click', () => {
   document.documentElement.style.overflow = 'hidden'
 })
 
+//close
 modalwrapper.addEventListener('click', (e) => {
   if (e.target === modalwrapper || e.target === closeModalBtn) {
     modalwrapper.classList.toggle('modal-wrapper')
@@ -28,7 +30,9 @@ modalwrapper.addEventListener('click', (e) => {
   }
 })
 
+// delete all and clear localstorage
 yesModalBtn.addEventListener('click', () => {
+  inputSearch.value = ''
   arrayOfToDo.length = 0
   localStorage.clear()
   modalwrapper.classList.toggle('modal-wrapper')
@@ -118,9 +122,10 @@ inputText.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') addTask()
 })
 
-// CLEAR ALL CHECKED TASKS
+// DELETE ALL SELECTED TASKS
 
 buttonClearChecked.addEventListener('click', () => {
+  inputSearch.value = ''
   arrayOfToDo = arrayOfToDo.filter((item) => !item.status)
   localStorage.setItem('array', JSON.stringify(arrayOfToDo))
   renderToDo(arrayOfToDo)
