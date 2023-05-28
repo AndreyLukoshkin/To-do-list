@@ -131,7 +131,7 @@ buttonClearChecked.addEventListener('click', () => {
   renderToDo(arrayOfToDo)
 })
 
-// SORT BY NAME / TIME
+// SORT BY NAME / TIME / CHECKED
 
 select.addEventListener('change', (e) => {
   if (e.target.value === 'name') {
@@ -144,6 +144,9 @@ select.addEventListener('change', (e) => {
       a.time.toLowerCase() > b.time.toLowerCase() ? 1 : -1
     )
   }
+  if (e.target.value === 'done') {
+    arrayOfToDo.sort((a, b) => (a.status < b.status ? 1 : -1))
+  }
   renderToDo(arrayOfToDo)
 })
 
@@ -154,27 +157,36 @@ inputSearch.addEventListener('input', (e) => {
   const searchedArray = arrayOfToDo.filter((el) =>
     el.name.toLowerCase().includes(value.toLowerCase())
   )
+  // localStorage.setItem('array', JSON.stringify(arrayOfToDo))
   renderToDo(searchedArray)
 })
 
 // CALLBACK - DELETE TASK
 
-const deleteElem = (arr, index) => {
-  arr.splice(index, 1)
-  localStorage.setItem('array', JSON.stringify(arr))
-  renderToDo(arr)
+const deleteElem = (id) => {
+  let ind
+  arrayOfToDo.forEach((el, i) => {
+    if (id === el.id) ind = i
+  })
+  arrayOfToDo.splice(ind, 1)
+
+  localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+  inputSearch.value = ''
+  renderToDo(arrayOfToDo)
 }
 
 // CALLBACK - TOGGLE STATUS
 
 const isStatusTrue = (arr, index) => {
   arr[index].status = !arr[index].status
+  localStorage.setItem('array', JSON.stringify(arr))
   renderToDo(arr)
 }
 
 // RENDER
 
 const renderToDo = (arr) => {
+  console.log(arr)
   // clear app, then append items with changes
   app.innerHTML = ''
 
@@ -235,7 +247,7 @@ const renderToDo = (arr) => {
     // DELETE TASK
 
     deleteButton.addEventListener('click', () => {
-      deleteElem(arr, index)
+      deleteElem(todo.id)
     })
 
     // SET STATUS FOR TASK
