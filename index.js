@@ -135,16 +135,17 @@ buttonClearChecked.addEventListener('click', () => {
 
 select.addEventListener('change', (e) => {
   if (e.target.value === 'name') {
+    inputSearch.value = ''
     arrayOfToDo.sort((a, b) =>
       a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
     )
   }
   if (e.target.value === 'time') {
-    arrayOfToDo.sort((a, b) =>
-      a.time.toLowerCase() > b.time.toLowerCase() ? 1 : -1
-    )
+    inputSearch.value = ''
+    arrayOfToDo.sort((a, b) => (a.time > b.time ? 1 : -1))
   }
   if (e.target.value === 'done') {
+    inputSearch.value = ''
     arrayOfToDo.sort((a, b) => (a.status < b.status ? 1 : -1))
   }
   renderToDo(arrayOfToDo)
@@ -157,7 +158,6 @@ inputSearch.addEventListener('input', (e) => {
   const searchedArray = arrayOfToDo.filter((el) =>
     el.name.toLowerCase().includes(value.toLowerCase())
   )
-  // localStorage.setItem('array', JSON.stringify(arrayOfToDo))
   renderToDo(searchedArray)
 })
 
