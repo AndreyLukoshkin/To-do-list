@@ -5,9 +5,42 @@ const buttonClearChecked = document.getElementById('buttonClearChecked')
 const app = document.getElementById('app')
 const select = document.getElementById('select')
 const inputSearch = document.getElementById('input__search')
+const tasksDiv = document.getElementById('tasks')
+const modal = document.getElementById('modal')
+const modalwrapper = document.getElementById('modalwrapper')
+const closeModalBtn = document.getElementById('closeModalBtn')
+const yesModalBtn = document.getElementById('yesModalBtn')
+
+// MODAL WINDOW
+
+buttonClearAll.addEventListener('click', () => {
+  if (arrayOfToDo.length === 0) return
+  modalwrapper.classList.toggle('modal-wrapper')
+  modal.classList.toggle('modal-open')
+  document.documentElement.style.overflow = 'hidden'
+})
+
+modalwrapper.addEventListener('click', (e) => {
+  if (e.target === modalwrapper || e.target === closeModalBtn) {
+    modalwrapper.classList.toggle('modal-wrapper')
+    modal.classList.toggle('modal-open')
+    document.documentElement.style.overflow = 'auto'
+  }
+})
+
+yesModalBtn.addEventListener('click', () => {
+  arrayOfToDo.length = 0
+  localStorage.clear()
+  modalwrapper.classList.toggle('modal-wrapper')
+  modal.classList.toggle('modal-open')
+  document.documentElement.style.overflow = 'auto'
+  renderToDo(arrayOfToDo)
+})
+
+// CALCULATE TIME/DATE
 
 const addZeroHoursSecondsMinutes = (...args) => {
-  let res = []
+  const res = []
   args.forEach((el) => {
     if (String(el).length < 2) {
       res.push(0 + String(el))
@@ -19,7 +52,7 @@ const addZeroHoursSecondsMinutes = (...args) => {
 }
 
 const addZeroToDateMonth = (...args) => {
-  let res = []
+  const res = []
   args.forEach((el) => {
     if (String(el).length < 2) {
       res.push(0 + String(el))
@@ -31,52 +64,33 @@ const addZeroToDateMonth = (...args) => {
 }
 
 const getDateAndTime = () => {
-  let time = new Date()
+  const time = new Date()
 
-  let hh = time.getHours()
-  let mm = time.getMinutes()
-  let ss = time.getSeconds()
-  let year = time.getFullYear()
-  let month = time.getMonth()
-  let date = time.getDate()
+  const hh = time.getHours()
+  const mm = time.getMinutes()
+  const ss = time.getSeconds()
+  const year = time.getFullYear()
+  const month = time.getMonth()
+  const date = time.getDate()
 
-  let calculatedTime = `${year}.${addZeroToDateMonth(
+  const calculatedTime = `${year}.${addZeroToDateMonth(
     month + 1,
     date
   )} ${addZeroHoursSecondsMinutes(hh, mm, ss)}`
   return calculatedTime
 }
 
-const arrayOfToDoList = [
-  {
-    name: 'Wait first',
-    status: false,
-    time: getDateAndTime(),
-  },
-  {
-    name: 'Go then',
-    status: false,
-    time: getDateAndTime(),
-  },
-  {
-    name: 'Arriva',
-    status: false,
-    time: getDateAndTime(),
-  },
-]
+// ARRAY OF TODOS
 
-localStorage.setItem('array', JSON.stringify(arrayOfToDoList))
-let savedArray = localStorage.getItem('array')
-let arrayOfToDo
+let arrayOfToDo = localStorage.getItem('array')
+  ? JSON.parse(localStorage.getItem('array'))
+  : []
 
-if (savedArray) {
-  arrayOfToDo = JSON.parse(savedArray)
-} else {
-  arrayOfToDo = arrayOfToDoList
-}
+// ADD NEW TASK
 
-button.addEventListener('click', () => {
-  // add new todo/wrong if emptys
+const addTask = () => {
+  const randomId = Math.random()
+  const id = Number(randomId.toFixed(15).substring(2))
 
   if (inputText.value) {
     inputText.classList.remove('container__inputTodo_inputText_wrong')
@@ -84,28 +98,37 @@ button.addEventListener('click', () => {
       name: inputText.value,
       status: false,
       time: getDateAndTime(),
+      id: id,
     })
+
+    localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+
+    inputText.value = ''
   } else {
     inputText.classList.add('container__inputTodo_inputText_wrong')
   }
 
   renderToDo(arrayOfToDo)
+}
+
+button.addEventListener('click', () => {
+  addTask()
+})
+inputText.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') addTask()
 })
 
-buttonClearAll.addEventListener('click', () => {
-  // clear all todos
-  arrayOfToDo.length = 0
+// CLEAR ALL CHECKED TASKS
+
+buttonClearChecked.addEventListener('click', () => {
+  arrayOfToDo = arrayOfToDo.filter((item) => !item.status)
+  localStorage.setItem('array', JSON.stringify(arrayOfToDo))
   renderToDo(arrayOfToDo)
 })
 
-buttonClearChecked.addEventListener('click', () => {
-  // clear all checked todos
-  let checkedTodos = arrayOfToDo.filter((el) => !el.status)
-  renderToDo(checkedTodos)
-})
+// SORT BY NAME / TIME
 
 select.addEventListener('change', (e) => {
-  // sort by name
   if (e.target.value === 'name') {
     arrayOfToDo.sort((a, b) =>
       a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
@@ -119,72 +142,72 @@ select.addEventListener('change', (e) => {
   renderToDo(arrayOfToDo)
 })
 
+// SEARCH BY INPUT VALUE - CONTROLLED JS INPUT
+
 inputSearch.addEventListener('input', (e) => {
-  // search by input value
-  let value = e.target.value
-  let searchedArray = arrayOfToDo.filter((el) =>
+  const value = e.target.value
+  const searchedArray = arrayOfToDo.filter((el) =>
     el.name.toLowerCase().includes(value.toLowerCase())
   )
   renderToDo(searchedArray)
 })
 
-const deleteElem = (name) => {
-  // delete todo element from arrayOfTodos
-  let indexDel
-  arrayOfToDo.forEach((item, index) => {
-    if (item.name === name) {
-      indexDel = index
-    }
-  })
-  arrayOfToDo.splice(indexDel, 1)
-  renderToDo(arrayOfToDo)
+// CALLBACK - DELETE TASK
+
+const deleteElem = (arr, index) => {
+  arr.splice(index, 1)
+  localStorage.setItem('array', JSON.stringify(arr))
+  renderToDo(arr)
 }
 
-const isStatusTrue = (status, name) => {
-  // toggle status in checkbox
-  arrayOfToDo.forEach((el) => {
-    if (el.name === name) el.status = !status
-  })
-  renderToDo(arrayOfToDo)
+// CALLBACK - TOGGLE STATUS
+
+const isStatusTrue = (arr, index) => {
+  arr[index].status = !arr[index].status
+  renderToDo(arr)
 }
 
 // RENDER
 
 const renderToDo = (arr) => {
-  app.innerHTML = ''
   // clear app, then append items with changes
+  app.innerHTML = ''
+
+  // SHOW TASKS IS EMPTY
+
+  const divEmpty = document.createElement('div')
+  divEmpty.textContent = 'You have no tasks'
+  divEmpty.classList.add('container__app_empty')
+  tasksDiv.textContent = `Tasks: ${arr.length}`
+
+  if (arr.length === 0) {
+    app.appendChild(divEmpty)
+  }
 
   arr.forEach((todo, index) => {
     const divContainerTodo = document.createElement('div')
     divContainerTodo.classList.add('container__app_todo-container')
 
-    //
-
     const divTodoParagraphAndTime = document.createElement('div')
     divTodoParagraphAndTime.classList.add('container__app_paragraph_time')
     const paragraph = document.createElement('p')
+    paragraph.classList.add('container__app_paragraph')
     const divTime = document.createElement('div')
     divTime.classList.add('container__app_time')
-
-    //
 
     const divCheckboxDelete = document.createElement('div')
     divCheckboxDelete.classList.add('container__app_checkbox_delete')
     const checkbox = document.createElement('input')
     const deleteButton = document.createElement('button')
 
-    //
-
     deleteButton.textContent = 'delete'
     paragraph.textContent = todo.name
-    paragraph.id = 'paragraph'
     divTime.textContent = todo.time
+
     divTodoParagraphAndTime.id = 'divIdTextandTime'
 
     checkbox.type = 'checkbox'
-    checkbox.name = 'name'
     checkbox.value = 'value'
-    checkbox.id = 'id'
     checkbox.checked = todo.status
 
     divContainerTodo.append(divTodoParagraphAndTime)
@@ -195,23 +218,25 @@ const renderToDo = (arr) => {
     divCheckboxDelete.append(deleteButton)
     app.appendChild(divContainerTodo)
 
+    // TOGGLE STYLES IF STATUS - TRUE / CHECKED
+
+    const divParagraphTime = document.querySelectorAll('#divIdTextandTime')
     if (todo.status) {
-      // change style if we toggle status on true
-      let paragraph = document.querySelectorAll('#paragraph')
-      for (const p of paragraph) {
-        if (p.textContent === todo.name)
-          p.closest('div').classList.toggle(
-            'container__app_paragraph_time_checked'
-          )
-      }
+      divParagraphTime[index].classList.toggle(
+        'container__app_paragraph_time_checked'
+      )
     }
 
+    // DELETE TASK
+
     deleteButton.addEventListener('click', () => {
-      deleteElem(todo.name)
+      deleteElem(arr, index)
     })
 
+    // SET STATUS FOR TASK
+
     checkbox.addEventListener('click', () => {
-      isStatusTrue(todo.status, todo.name)
+      isStatusTrue(arr, index)
     })
   })
 }
