@@ -187,6 +187,7 @@ const isStatusTrue = (id) => {
   arrayOfToDo[ind].status = !arrayOfToDo[ind].status
 
   localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+  inputSearch.value = ''
   renderToDo(arrayOfToDo)
 }
 
