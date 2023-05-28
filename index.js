@@ -90,6 +90,8 @@ let arrayOfToDo = localStorage.getItem('array')
   ? JSON.parse(localStorage.getItem('array'))
   : []
 
+let searchedArray
+
 // ADD NEW TASK
 
 const addTask = () => {
@@ -155,7 +157,7 @@ select.addEventListener('change', (e) => {
 
 inputSearch.addEventListener('input', (e) => {
   const value = e.target.value
-  const searchedArray = arrayOfToDo.filter((el) =>
+  searchedArray = arrayOfToDo.filter((el) =>
     el.name.toLowerCase().includes(value.toLowerCase())
   )
   renderToDo(searchedArray)
@@ -177,10 +179,15 @@ const deleteElem = (id) => {
 
 // CALLBACK - TOGGLE STATUS
 
-const isStatusTrue = (arr, index) => {
-  arr[index].status = !arr[index].status
-  localStorage.setItem('array', JSON.stringify(arr))
-  renderToDo(arr)
+const isStatusTrue = (id) => {
+  let ind
+  arrayOfToDo.forEach((el, i) => {
+    if (id === el.id) ind = i
+  })
+  arrayOfToDo[ind].status = !arrayOfToDo[ind].status
+
+  localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+  renderToDo(arrayOfToDo)
 }
 
 // RENDER
@@ -253,7 +260,7 @@ const renderToDo = (arr) => {
     // SET STATUS FOR TASK
 
     checkbox.addEventListener('click', () => {
-      isStatusTrue(arr, index)
+      isStatusTrue(todo.id)
     })
   })
 }
