@@ -8,31 +8,49 @@
   </head>
   <body>
     <div class="todoList__wrapper">
+
+      <div id='modalwrapper'>
+        <div id="modal" class="modal">
+          <span>Are you sure you want to <br><span style="font-size: 1.1em; font-weight: bold;">delete all tasks</span><br> and clear the localStorage?</span>
+          <div>
+            <button id='yesModalBtn' class="modal_btn">Yes, sure!</button>
+            <button id="closeModalBtn" class="modal_btn">No, wait</button>
+          </div>
+        </div>
+      </div>
+
       <div class="container">
+
         <header class="header">
           <h1 class="container__h1">ToDo Vanilla JS</h1>
         </header>
+
         <main class="main">
           <div class="container__inputTodo">
-              <input class="container__inputTodo_inputText" id="inputText" type="text"/>
-              <button class="container__inputTodo_button" id="button">Add new task</button>
-                <div class='container__buttons'>
-                  <button class="container__buttons_button" id="buttonClearAll">Clear all</button>
-                  <button class="container__buttons_button" id="buttonClearChecked">Clear checked</button>
+            <input class="container__inputTodo_inputText" id="inputText" type="text"/>
+            <button class="container__inputTodo_button" id="button">Add new task</button>
+              <div class='container__buttons'>
+                  <button class="container__buttons_button" id="buttonClearAll">Delete all</button>
+                  <button class="container__buttons_button" id="buttonClearChecked">Delete selected</button>
                   <select id="select" class="container__buttons_select">
                     <option disabled selected></option>
                     <option value="name">By name</option>
                     <option value="time">By time</option>
                   </select>
                   <input class="container__buttons_input" id="input__search" type="text" placeholder="search" value="">
-                </div>
+                  <div id="tasks" class="container__buttons_tasks"></div>
+              </div>
           </div>
+
           <div class="container__app" id="app"></div>
         </main>
+
           <footer class="footer">
             JavaScript
           </footer>
+
         <script src="index.js"></script>
+
       </div>
     </div>
   </body>
