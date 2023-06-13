@@ -162,9 +162,27 @@ body {
   padding: 10px 20px;
   background: white;
 }
-/* 
-.container__app_paragraph {
-} */
+
+.container__app_paragraph,
+.container__app_link {
+  overflow-wrap: anywhere;
+}
+
+.container__app_link {
+  color: #0088cc; /* Ярко-синий цвет текста */
+  text-decoration: none; /* Удаление подчеркивания */
+  font-weight: bold; /* Жирный текст */
+  transition: color 0.3s ease; /* Плавный переход цвета */
+}
+
+.container__app_link:hover {
+  color: #ea6c3e; /* Оранжевый цвет текста при наведении */
+}
+
+.container__app_link::after {
+  content: '\2192'; /* Символ стрелки вправо */
+  margin-left: 5px; /* Отступ слева от текста */
+}
 
 .container__app_paragraph_time_checked {
   background-color: rgb(235, 235, 235) !important;
