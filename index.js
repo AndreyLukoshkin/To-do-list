@@ -219,6 +219,8 @@ const renderToDo = (arr) => {
     divTodoParagraphAndTime.classList.add('container__app_paragraph_time')
     const paragraph = document.createElement('p')
     paragraph.classList.add('container__app_paragraph')
+    const link = document.createElement('a')
+    link.classList.add('container__app_link')
     const divTime = document.createElement('div')
     divTime.classList.add('container__app_time')
 
@@ -228,7 +230,6 @@ const renderToDo = (arr) => {
     const deleteButton = document.createElement('button')
 
     deleteButton.textContent = 'delete'
-    paragraph.textContent = todo.name
     divTime.textContent = todo.time
 
     divTodoParagraphAndTime.id = 'divIdTextandTime'
@@ -237,17 +238,23 @@ const renderToDo = (arr) => {
     checkbox.value = 'value'
     checkbox.checked = todo.status
 
-    if (linkRegex.test(todo.name)) {
-      const link = document.createElement('a')
-      link.classList.add('container__app_link')
-      link.href = todo.name
-      link.target = '_blank'
-      link.textContent = todo.name
-      divTodoParagraphAndTime.append(link)
-    } else {
-      divTodoParagraphAndTime.append(paragraph)
-      divTodoParagraphAndTime.append(divTime)
-    }
+    let splited = todo.name.split(' ')
+    let linkCorrect = ''
+
+    splited.forEach((el, i) => {
+      if (linkRegex.test(el)) linkCorrect = splited.splice(i, 1).join('')
+    })
+
+    paragraph.textContent = splited.join(' ')
+
+    link.href = linkCorrect
+    link.target = '_blank'
+    link.textContent = linkCorrect
+
+    if (linkCorrect) divTodoParagraphAndTime.append(link)
+
+    divTodoParagraphAndTime.append(paragraph)
+    divTodoParagraphAndTime.append(divTime)
 
     divContainerTodo.append(divTodoParagraphAndTime)
     divContainerTodo.append(divCheckboxDelete)
