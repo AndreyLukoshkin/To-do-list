@@ -193,6 +193,8 @@ const isStatusTrue = (id) => {
 
 // RENDER
 
+let linkRegex = /^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/
+
 const renderToDo = (arr) => {
   console.log(arr)
   // clear app, then append items with changes
@@ -235,9 +237,19 @@ const renderToDo = (arr) => {
     checkbox.value = 'value'
     checkbox.checked = todo.status
 
+    if (linkRegex.test(todo.name)) {
+      const link = document.createElement('a')
+      link.classList.add('container__app_link')
+      link.href = todo.name
+      link.target = '_blank'
+      link.textContent = todo.name
+      divTodoParagraphAndTime.append(link)
+    } else {
+      divTodoParagraphAndTime.append(paragraph)
+      divTodoParagraphAndTime.append(divTime)
+    }
+
     divContainerTodo.append(divTodoParagraphAndTime)
-    divTodoParagraphAndTime.append(paragraph)
-    divTodoParagraphAndTime.append(divTime)
     divContainerTodo.append(divCheckboxDelete)
     divCheckboxDelete.append(checkbox)
     divCheckboxDelete.append(deleteButton)
