@@ -147,20 +147,24 @@ body {
 }
 
 .container__app_todo-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   margin: 0 10px;
   margin-bottom: 10px;
 }
 
 .container__app_paragraph_time {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   border: 1px solid rgb(126, 179, 195);
   border-radius: 5px;
   padding: 10px 20px;
   background: white;
+  display: grid;
+  grid-template: repeat(2, auto) / repeat(2, auto);
+  grid-template-areas:
+    'paragraph time'
+    'link time';
+}
+.container__app_paragraph {
+  grid-area: paragraph;
 }
 
 .container__app_paragraph,
@@ -169,6 +173,7 @@ body {
 }
 
 .container__app_link {
+  grid-area: link;
   color: #0088cc; /* Ярко-синий цвет текста */
   text-decoration: none; /* Удаление подчеркивания */
   font-weight: bold; /* Жирный текст */
@@ -191,6 +196,10 @@ body {
 }
 
 .container__app_time {
+  display: grid;
+  grid-area: time;
+  justify-content: end;
+  align-self: center;
   color: rgba(41, 43, 44, 0.5);
   font-size: 12px;
 }
