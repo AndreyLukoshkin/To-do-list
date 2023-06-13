@@ -196,7 +196,7 @@ const isStatusTrue = (id) => {
 let linkRegex = /^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/
 
 const renderToDo = (arr) => {
-  console.log(arr)
+  // console.log(arr)
   // clear app, then append items with changes
   app.innerHTML = ''
 
@@ -214,13 +214,12 @@ const renderToDo = (arr) => {
   arr.forEach((todo, index) => {
     const divContainerTodo = document.createElement('div')
     divContainerTodo.classList.add('container__app_todo-container')
-
-    const divTodoParagraphAndTime = document.createElement('div')
-    divTodoParagraphAndTime.classList.add('container__app_paragraph_time')
-    const paragraph = document.createElement('p')
-    paragraph.classList.add('container__app_paragraph')
-    const link = document.createElement('a')
-    link.classList.add('container__app_link')
+    const paragraphLinkTimeContainer = document.createElement('div')
+    paragraphLinkTimeContainer.classList.add(
+      'container__app_paragraph_link_time'
+    )
+    const divTodoParagraphLink = document.createElement('div')
+    divTodoParagraphLink.classList.add('container__app_paragraph_link')
     const divTime = document.createElement('div')
     divTime.classList.add('container__app_time')
 
@@ -232,31 +231,43 @@ const renderToDo = (arr) => {
     deleteButton.textContent = 'delete'
     divTime.textContent = todo.time
 
-    divTodoParagraphAndTime.id = 'divIdTextandTime'
+    divTodoParagraphLink.id = 'divIdTextandTime'
 
     checkbox.type = 'checkbox'
     checkbox.value = 'value'
     checkbox.checked = todo.status
 
     let splited = todo.name.split(' ')
-    let linkCorrect = ''
+    let linkCorrect = []
+    let correctText = []
 
     splited.forEach((el, i) => {
-      if (linkRegex.test(el)) linkCorrect = splited.splice(i, 1).join('')
+      if (linkRegex.test(el)) {
+        return (linkCorrect = splited.filter((el) => linkRegex.test(el)))
+      } else {
+        return (correctText = splited.filter((el) => !linkRegex.test(el)))
+      }
     })
 
-    paragraph.textContent = splited.join(' ')
+    const paragraph = document.createElement('p')
+    paragraph.classList.add('container__app_paragraph')
 
-    link.href = linkCorrect
-    link.target = '_blank'
-    link.textContent = linkCorrect
+    paragraph.textContent = correctText.join(' ')
+    divTodoParagraphLink.append(paragraph)
 
-    if (linkCorrect) divTodoParagraphAndTime.append(link)
+    linkCorrect.forEach((el) => {
+      const link = document.createElement('a')
+      link.classList.add('container__app_link')
 
-    divTodoParagraphAndTime.append(paragraph)
-    divTodoParagraphAndTime.append(divTime)
+      link.href = el
+      link.target = '_blank'
+      link.textContent = el
+      divTodoParagraphLink.append(link)
+    })
 
-    divContainerTodo.append(divTodoParagraphAndTime)
+    divContainerTodo.append(paragraphLinkTimeContainer)
+    paragraphLinkTimeContainer.append(divTodoParagraphLink)
+    paragraphLinkTimeContainer.append(divTime)
     divContainerTodo.append(divCheckboxDelete)
     divCheckboxDelete.append(checkbox)
     divCheckboxDelete.append(deleteButton)

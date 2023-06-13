@@ -152,19 +152,21 @@ body {
   margin-bottom: 10px;
 }
 
-.container__app_paragraph_time {
+.container__app_paragraph_link_time {
   border: 1px solid rgb(126, 179, 195);
   border-radius: 5px;
   padding: 10px 20px;
   background: white;
-  display: grid;
-  grid-template: repeat(2, auto) / repeat(2, auto);
-  grid-template-areas:
-    'paragraph time'
-    'link time';
+  display: flex;
+  justify-content: space-between;
 }
+
+.container__app_paragraph_link {
+  display: flex;
+  flex-direction: column;
+}
+
 .container__app_paragraph {
-  grid-area: paragraph;
 }
 
 .container__app_paragraph,
@@ -173,7 +175,6 @@ body {
 }
 
 .container__app_link {
-  grid-area: link;
   color: #0088cc; /* Ярко-синий цвет текста */
   text-decoration: none; /* Удаление подчеркивания */
   font-weight: bold; /* Жирный текст */
