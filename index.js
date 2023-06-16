@@ -211,7 +211,7 @@ const renderToDo = (arr) => {
     app.appendChild(divEmpty)
   }
 
-  arr.forEach((todo, index) => {
+  arr.forEach((todo) => {
     const divContainerTodo = document.createElement('div')
     divContainerTodo.classList.add('container__app_todo-container')
     const paragraphLinkTimeContainer = document.createElement('div')
@@ -230,8 +230,6 @@ const renderToDo = (arr) => {
 
     deleteButton.textContent = 'delete'
     divTime.textContent = todo.time
-
-    divTodoParagraphLink.id = 'divIdTextandTime'
 
     checkbox.type = 'checkbox'
     checkbox.value = 'value'
@@ -275,9 +273,8 @@ const renderToDo = (arr) => {
 
     // TOGGLE STYLES IF STATUS - TRUE / CHECKED
 
-    const divParagraphTime = document.querySelectorAll('#divIdTextandTime')
     if (todo.status) {
-      divParagraphTime[index].classList.toggle(
+      paragraphLinkTimeContainer.classList.toggle(
         'container__app_paragraph_time_checked'
       )
     }
