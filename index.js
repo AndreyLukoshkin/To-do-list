@@ -10,8 +10,14 @@ const modal = document.getElementById('modal')
 const modalwrapper = document.getElementById('modalwrapper')
 const closeModalBtn = document.getElementById('closeModalBtn')
 const yesModalBtn = document.getElementById('yesModalBtn')
-
+// select
 // MODAL WINDOW
+
+// Save to LocalStorage
+
+const saveLocalStorage = () => {
+  return localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+}
 
 //open
 buttonClearAll.addEventListener('click', () => {
@@ -77,10 +83,8 @@ const getDateAndTime = () => {
   const month = time.getMonth()
   const date = time.getDate()
 
-  const calculatedTime = `${year}.${addZeroToDateMonth(
-    month + 1,
-    date
-  )} ${addZeroHoursSecondsMinutes(hh, mm, ss)}`
+  const calculatedTime = `${year}.${addZeroToDateMonth(month + 1, date)} 
+  ${addZeroHoursSecondsMinutes(hh, mm, ss)}`
   return calculatedTime
 }
 
@@ -107,7 +111,7 @@ const addTask = () => {
       id: id,
     })
 
-    localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+    saveLocalStorage()
 
     inputText.value = ''
   } else {
@@ -129,7 +133,7 @@ inputText.addEventListener('keydown', (e) => {
 buttonClearChecked.addEventListener('click', () => {
   inputSearch.value = ''
   arrayOfToDo = arrayOfToDo.filter((item) => !item.status)
-  localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+  saveLocalStorage()
   renderToDo(arrayOfToDo)
 })
 
@@ -172,9 +176,66 @@ const deleteElem = (id) => {
   })
   arrayOfToDo.splice(ind, 1)
 
-  localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+  saveLocalStorage()
   inputSearch.value = ''
   renderToDo(arrayOfToDo)
+}
+
+// CALLBACK - EDIT TASK
+
+const editElem = (id, currentTodo, editBtn, parentContainer) => {
+  editBtn.classList.toggle('editing')
+
+  const inputEditElement = document.createElement('textarea')
+  inputEditElement.classList.add('container__app_inputEdit')
+  const cancelChangesEdit = document.createElement('button')
+  cancelChangesEdit.textContent = 'cancel'
+  cancelChangesEdit.id = 'cancelBtn'
+  const paragraphWithText = currentTodo.querySelector(
+    '.container__app_paragraph'
+  )
+
+  paragraphWithText.classList.toggle('hiddenText')
+
+  inputEditElement.value = paragraphWithText.textContent
+
+  const containerWithEditAndDeleteButtons = parentContainer.querySelector(
+    '.container__app_checkbox_delete'
+  )
+
+  const originalText = paragraphWithText.textContent
+
+  cancelChangesEdit.addEventListener('click', () => {
+    inputEditElement.remove()
+    cancelChangesEdit.remove()
+    editBtn.textContent = 'edit'
+    editBtn.classList.remove('editing')
+    paragraphWithText.classList.remove('hiddenText')
+    paragraphWithText.textContent = originalText
+  })
+
+  if (editBtn.classList.contains('editing')) {
+    currentTodo.append(inputEditElement)
+    containerWithEditAndDeleteButtons.append(cancelChangesEdit)
+    editBtn.textContent = 'save'
+
+    inputEditElement.addEventListener('input', (event) => {
+      const value = event.target.value
+      paragraphWithText.textContent = value
+    })
+  } else {
+    editBtn.textContent = 'edit'
+    currentTodo.querySelector('textarea').remove()
+    containerWithEditAndDeleteButtons.querySelector('#cancelBtn').remove()
+  }
+
+  let ind
+  arrayOfToDo.forEach((el, i) => {
+    if (id === el.id) ind = i
+  })
+  arrayOfToDo[ind].name = paragraphWithText.textContent
+
+  saveLocalStorage()
 }
 
 // CALLBACK - TOGGLE STATUS
@@ -186,7 +247,7 @@ const isStatusTrue = (id) => {
   })
   arrayOfToDo[ind].status = !arrayOfToDo[ind].status
 
-  localStorage.setItem('array', JSON.stringify(arrayOfToDo))
+  saveLocalStorage()
   inputSearch.value = ''
   renderToDo(arrayOfToDo)
 }
@@ -227,8 +288,11 @@ const renderToDo = (arr) => {
     divCheckboxDelete.classList.add('container__app_checkbox_delete')
     const checkbox = document.createElement('input')
     const deleteButton = document.createElement('button')
+    const editButton = document.createElement('button')
+    editButton.id = 'editButton'
 
     deleteButton.textContent = 'delete'
+    editButton.textContent = 'edit'
     divTime.textContent = todo.time
 
     checkbox.type = 'checkbox'
@@ -269,6 +333,7 @@ const renderToDo = (arr) => {
     divContainerTodo.append(divCheckboxDelete)
     divCheckboxDelete.append(checkbox)
     divCheckboxDelete.append(deleteButton)
+    divCheckboxDelete.append(editButton)
     app.appendChild(divContainerTodo)
 
     // TOGGLE STYLES IF STATUS - TRUE / CHECKED
@@ -283,6 +348,15 @@ const renderToDo = (arr) => {
 
     deleteButton.addEventListener('click', () => {
       deleteElem(todo.id)
+    })
+
+    // EDIT TASK
+
+    editButton.addEventListener('click', (e) => {
+      const parentContainer = e.target.closest('.container__app_todo-container')
+      const currentTodo = parentContainer.firstElementChild
+      const editBtn = e.target
+      editElem(todo.id, currentTodo, editBtn, parentContainer)
     })
 
     // SET STATUS FOR TASK
