@@ -336,13 +336,16 @@ const renderToDo = (arr) => {
     checkbox.value = 'value'
     checkbox.checked = todo.status
 
-    const link = todo.link.split(' ')
-    link.forEach((el) =>
-      divTodoParagraphLink.insertAdjacentHTML(
-        'beforeend',
-        `<a href='${el}' class='container__app_link' target = '_blank'>${el}</a>`
+    // check for empty links
+    if (todo.link) {
+      const link = todo.link.split(' ')
+      link.forEach((el) =>
+        divTodoParagraphLink.insertAdjacentHTML(
+          'beforeend',
+          `<a href='${el}' class='container__app_link' target = '_blank'>${el}</a>`
+        )
       )
-    )
+    }
 
     const paragraph = document.createElement('p')
     paragraph.classList.add('container__app_paragraph')
