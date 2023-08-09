@@ -336,6 +336,7 @@ const renderToDo = (arr) => {
     checkbox.value = 'value'
     checkbox.checked = todo.status
 
+    // check for empty links
     if (todo.link) {
       const link = todo.link.split(' ')
       link.forEach((el) =>
