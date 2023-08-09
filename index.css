@@ -207,11 +207,6 @@ body {
   color: #ea6c3e; /* Оранжевый цвет текста при наведении */
 }
 
-.container__app_link::after {
-  content: '\2192'; /* Символ стрелки вправо */
-  margin-left: 5px; /* Отступ слева от текста */
-}
-
 .container__app_paragraph_time_checked {
   background-color: rgb(235, 235, 235) !important;
   color: rgb(199, 199, 199) !important;
@@ -222,10 +217,10 @@ body {
   display: flex;
   align-self: center;
   justify-content: end;
-  max-width: 65px;
-  width: 100px;
+  width: 70px;
   color: rgba(41, 43, 44, 0.5);
   font-size: 12px;
+  padding-left: 5px;
 }
 
 .container__app_checkbox_delete {

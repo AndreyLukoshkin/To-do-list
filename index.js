@@ -96,16 +96,33 @@ let arrayOfToDo = localStorage.getItem('array')
 
 let searchedArray
 
+//CHECK FOR LINK
+
+const linkRegex = /^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/
+
 // ADD NEW TASK
 
 const addTask = () => {
   const randomId = Math.random()
   const id = Number(randomId.toFixed(15).substring(2))
 
+  let splited = inputText.value.split(' ')
+  let linkCorrect = []
+  let correctText = []
+
+  splited.forEach((el, i) => {
+    if (linkRegex.test(el)) {
+      return (linkCorrect = splited.filter((el) => linkRegex.test(el)))
+    } else {
+      return (correctText = splited.filter((el) => !linkRegex.test(el)))
+    }
+  })
+
   if (inputText.value) {
     inputText.classList.remove('container__inputTodo_inputText_wrong')
     arrayOfToDo.push({
-      name: inputText.value,
+      name: correctText.join(''),
+      link: linkCorrect.join(''),
       status: false,
       time: getDateAndTime(),
       id: id,
@@ -186,7 +203,7 @@ const deleteElem = (id) => {
 const editElem = (id, currentTodo, editBtn, parentContainer) => {
   editBtn.classList.toggle('editing')
 
-  const inputEditElement = document.createElement('textarea')
+  const inputEditElement = document.createElement('input')
   inputEditElement.classList.add('container__app_inputEdit')
   const cancelChangesEdit = document.createElement('button')
   cancelChangesEdit.textContent = 'cancel'
@@ -225,7 +242,7 @@ const editElem = (id, currentTodo, editBtn, parentContainer) => {
     })
   } else {
     editBtn.textContent = 'edit'
-    currentTodo.querySelector('textarea').remove()
+    currentTodo.querySelector('input').remove()
     containerWithEditAndDeleteButtons.querySelector('#cancelBtn').remove()
   }
 
@@ -253,8 +270,6 @@ const isStatusTrue = (id) => {
 }
 
 // RENDER
-
-let linkRegex = /^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/
 
 const renderToDo = (arr) => {
   // console.log(arr)
@@ -299,33 +314,18 @@ const renderToDo = (arr) => {
     checkbox.value = 'value'
     checkbox.checked = todo.status
 
-    let splited = todo.name.split(' ')
-    let linkCorrect = []
-    let correctText = []
-
-    splited.forEach((el, i) => {
-      if (linkRegex.test(el)) {
-        return (linkCorrect = splited.filter((el) => linkRegex.test(el)))
-      } else {
-        return (correctText = splited.filter((el) => !linkRegex.test(el)))
-      }
-    })
+    const link = document.createElement('a')
+    link.classList.add('container__app_link')
+    link.href = todo.link
+    link.target = '_blank'
+    link.textContent = todo.link
 
     const paragraph = document.createElement('p')
     paragraph.classList.add('container__app_paragraph')
+    paragraph.textContent = todo.name
 
-    paragraph.textContent = correctText.join(' ')
     divTodoParagraphLink.append(paragraph)
-
-    linkCorrect.forEach((el) => {
-      const link = document.createElement('a')
-      link.classList.add('container__app_link')
-
-      link.href = el
-      link.target = '_blank'
-      link.textContent = el
-      divTodoParagraphLink.append(link)
-    })
+    divTodoParagraphLink.append(link)
 
     divContainerTodo.append(paragraphLinkTimeContainer)
     paragraphLinkTimeContainer.append(divTodoParagraphLink)
