@@ -154,7 +154,7 @@ buttonClearChecked.addEventListener('click', () => {
   renderToDo(arrayOfToDo)
 })
 
-// SORT BY NAME / TIME / CHECKED
+// SORT BY NAME / TIME / DONE
 
 select.addEventListener('change', (e) => {
   if (e.target.value === 'name') {
@@ -169,8 +169,17 @@ select.addEventListener('change', (e) => {
   }
   if (e.target.value === 'done') {
     inputSearch.value = ''
-    arrayOfToDo.sort((a, b) => (a.status < b.status ? 1 : -1))
+    arrayOfToDo.sort((a, b) => {
+      if (a.status === b.status) {
+        return 0
+      } else if (a.status) {
+        return -1
+      } else {
+        return 1
+      }
+    })
   }
+
   renderToDo(arrayOfToDo)
 })
 
@@ -294,7 +303,7 @@ const isStatusTrue = (id) => {
 // RENDER
 
 const renderToDo = (arr) => {
-  // console.log(arr)
+  console.log(arr)
   // clear app, then append items with changes
   app.innerHTML = ''
 
