@@ -170,13 +170,8 @@ select.addEventListener('change', (e) => {
   if (e.target.value === 'done') {
     inputSearch.value = ''
     arrayOfToDo.sort((a, b) => {
-      if (a.status === b.status) {
-        return 0
-      } else if (a.status) {
-        return -1
-      } else {
-        return 1
-      }
+      if (a.status === b.status) return 0
+      return a.status < b.status ? 1 : -1
     })
   }
 
