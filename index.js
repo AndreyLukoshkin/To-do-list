@@ -121,8 +121,8 @@ const addTask = () => {
   if (inputText.value) {
     inputText.classList.remove('container__inputTodo_inputText_wrong')
     arrayOfToDo.push({
-      name: correctText.join(''),
-      link: linkCorrect.join(''),
+      name: correctText.join(' '),
+      link: linkCorrect.join(' '),
       status: false,
       time: getDateAndTime(),
       id: id,
@@ -201,35 +201,44 @@ const deleteElem = (id) => {
 // CALLBACK - EDIT TASK
 
 const editElem = (id, currentTodo, editBtn, parentContainer) => {
-  editBtn.classList.toggle('editing')
-
-  const inputEditElement = document.createElement('input')
-  inputEditElement.classList.add('container__app_inputEdit')
-  const cancelChangesEdit = document.createElement('button')
-  cancelChangesEdit.textContent = 'cancel'
-  cancelChangesEdit.id = 'cancelBtn'
-  const paragraphWithText = currentTodo.querySelector(
-    '.container__app_paragraph'
-  )
-
-  paragraphWithText.classList.toggle('hiddenText')
-
-  inputEditElement.value = paragraphWithText.textContent
+  let ind
+  arrayOfToDo.forEach((el, i) => {
+    if (id === el.id) ind = i
+  })
 
   const containerWithEditAndDeleteButtons = parentContainer.querySelector(
     '.container__app_checkbox_delete'
   )
 
-  const originalText = paragraphWithText.textContent
+  const todoText = arrayOfToDo[ind].name
+  const todoLink = arrayOfToDo[ind].link
+
+  const inputEditElement = document.createElement('input')
+  inputEditElement.classList.add('container__app_inputEdit')
+  inputEditElement.value = todoText + ' ' + todoLink
+
+  const cancelChangesEdit = document.createElement('button')
+  cancelChangesEdit.textContent = 'cancel'
+  cancelChangesEdit.id = 'cancelBtn'
+
+  // if press cancel button
+
+  const originalText = todoText
+  const originalLink = todoLink
 
   cancelChangesEdit.addEventListener('click', () => {
     inputEditElement.remove()
     cancelChangesEdit.remove()
     editBtn.textContent = 'edit'
     editBtn.classList.remove('editing')
-    paragraphWithText.classList.remove('hiddenText')
-    paragraphWithText.textContent = originalText
+    arrayOfToDo[ind].name = originalText
+    arrayOfToDo[ind].link = originalLink
+    renderToDo(arrayOfToDo)
   })
+
+  // if press edit button
+
+  editBtn.classList.toggle('editing')
 
   if (editBtn.classList.contains('editing')) {
     currentTodo.append(inputEditElement)
@@ -238,7 +247,20 @@ const editElem = (id, currentTodo, editBtn, parentContainer) => {
 
     inputEditElement.addEventListener('input', (event) => {
       const value = event.target.value
-      paragraphWithText.textContent = value
+
+      let splited = value.split(' ')
+      let linkCorrect = []
+      let correctText = []
+
+      splited.forEach((el, i) => {
+        if (linkRegex.test(el)) {
+          return (linkCorrect = splited.filter((el) => linkRegex.test(el)))
+        } else {
+          return (correctText = splited.filter((el) => !linkRegex.test(el)))
+        }
+      })
+      arrayOfToDo[ind].name = correctText.join(' ')
+      arrayOfToDo[ind].link = linkCorrect.join(' ')
     })
   } else {
     editBtn.textContent = 'edit'
@@ -246,11 +268,11 @@ const editElem = (id, currentTodo, editBtn, parentContainer) => {
     containerWithEditAndDeleteButtons.querySelector('#cancelBtn').remove()
   }
 
-  let ind
-  arrayOfToDo.forEach((el, i) => {
-    if (id === el.id) ind = i
+  // if press save button
+
+  editBtn.addEventListener('click', () => {
+    renderToDo(arrayOfToDo)
   })
-  arrayOfToDo[ind].name = paragraphWithText.textContent
 
   saveLocalStorage()
 }
@@ -314,19 +336,19 @@ const renderToDo = (arr) => {
     checkbox.value = 'value'
     checkbox.checked = todo.status
 
-    const link = document.createElement('a')
-    link.classList.add('container__app_link')
-    link.href = todo.link
-    link.target = '_blank'
-    link.textContent = todo.link
+    const link = todo.link.split(' ')
+    link.forEach((el) =>
+      divTodoParagraphLink.insertAdjacentHTML(
+        'beforeend',
+        `<a href='${el}' class='container__app_link' target = '_blank'>${el}</a>`
+      )
+    )
 
     const paragraph = document.createElement('p')
     paragraph.classList.add('container__app_paragraph')
     paragraph.textContent = todo.name
 
-    divTodoParagraphLink.append(paragraph)
-    divTodoParagraphLink.append(link)
-
+    divTodoParagraphLink.prepend(paragraph)
     divContainerTodo.append(paragraphLinkTimeContainer)
     paragraphLinkTimeContainer.append(divTodoParagraphLink)
     paragraphLinkTimeContainer.append(divTime)
