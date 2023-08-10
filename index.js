@@ -138,9 +138,8 @@ const addTask = () => {
   renderToDo(arrayOfToDo)
 }
 
-button.addEventListener('click', () => {
-  addTask()
-})
+button.addEventListener('click', addTask)
+
 inputText.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') addTask()
 })
@@ -213,11 +212,18 @@ const editElem = (id, currentTodo, editBtn, parentContainer) => {
   const containerWithEditAndDeleteButtons = parentContainer.querySelector(
     '.container__app_checkbox_delete'
   )
+  const paragraphWithText = currentTodo.querySelector(
+    '.container__app_paragraph'
+  )
+  const divTodoParagraphLink = currentTodo.querySelector(
+    '.container__app_paragraph_link'
+  )
+  // const tagsWithLinks = currentTodo.querySelectorAll('.container__app_link')
 
   const todoText = arrayOfToDo[ind].name
   const todoLink = arrayOfToDo[ind].link
 
-  const inputEditElement = document.createElement('input')
+  const inputEditElement = document.createElement('textarea')
   inputEditElement.classList.add('container__app_inputEdit')
   inputEditElement.value = todoText + ' ' + todoLink
 
@@ -237,12 +243,14 @@ const editElem = (id, currentTodo, editBtn, parentContainer) => {
     editBtn.classList.remove('editing')
     arrayOfToDo[ind].name = originalText
     arrayOfToDo[ind].link = originalLink
-    renderToDo(arrayOfToDo)
   })
 
   // if press edit button
 
   editBtn.classList.toggle('editing')
+
+  let linkCorrect = []
+  let correctText = []
 
   if (editBtn.classList.contains('editing')) {
     currentTodo.append(inputEditElement)
@@ -251,10 +259,8 @@ const editElem = (id, currentTodo, editBtn, parentContainer) => {
 
     inputEditElement.addEventListener('input', (event) => {
       const value = event.target.value
-
+      console.log(value)
       let splited = value.split(' ')
-      let linkCorrect = []
-      let correctText = []
 
       splited.forEach((el, i) => {
         if (linkRegex.test(el)) {
@@ -268,16 +274,43 @@ const editElem = (id, currentTodo, editBtn, parentContainer) => {
     })
   } else {
     editBtn.textContent = 'edit'
-    currentTodo.querySelector('input').remove()
+    currentTodo.querySelector('textarea').remove()
     containerWithEditAndDeleteButtons.querySelector('#cancelBtn').remove()
   }
 
   // if press save button
 
   editBtn.addEventListener('click', () => {
-    renderToDo(arrayOfToDo)
+    if (arrayOfToDo[ind].link) {
+      const tagsWithLinks = currentTodo.querySelectorAll('.container__app_link')
+
+      tagsWithLinks.forEach((el) => {
+        el.remove()
+      })
+      arrayOfToDo[ind].link
+        .split(' ')
+        .forEach((el) =>
+          divTodoParagraphLink.insertAdjacentHTML(
+            'beforeend',
+            `<a href='${el}' class='container__app_link' target = '_blank'>${el}</a>`
+          )
+        )
+    } else {
+      const tagsWithLinks = currentTodo.querySelectorAll('.container__app_link')
+      tagsWithLinks.forEach((el) => {
+        el.remove()
+      })
+    }
+
+    if (arrayOfToDo[ind].name) {
+      paragraphWithText.textContent = arrayOfToDo[ind].name
+      divTodoParagraphLink.prepend(paragraphWithText)
+    } else {
+      paragraphWithText.textContent = ''
+    }
   })
 
+  //save arrayWithTodos
   saveLocalStorage()
 }
 
@@ -298,7 +331,7 @@ const isStatusTrue = (id) => {
 // RENDER
 
 const renderToDo = (arr) => {
-  console.log(arr)
+  // console.log(arr)
   // clear app, then append items with changes
   app.innerHTML = ''
 
